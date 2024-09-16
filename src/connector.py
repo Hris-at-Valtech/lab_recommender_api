@@ -1,4 +1,3 @@
-import datetime
 import os
 
 import snowflake.connector
@@ -38,62 +37,39 @@ conn = connect()
 # Make the API endpoints
 connector = Blueprint('connector', __name__)
 
-## Top 10 customers in date range
-dateformat = '%Y-%m-%d'
-
-@connector.route('/customers/top10')
-def customers_top10():
-    # Validate arguments
-    sdt_str = request.args.get('start_range') or '1995-01-01'
-    edt_str = request.args.get('end_range') or '1995-03-31'
+@connector.route('/customer')
+def get_customer():
     try:
-        sdt = datetime.datetime.strptime(sdt_str, dateformat)
-        edt = datetime.datetime.strptime(edt_str, dateformat)
+        cust_id = str(request.args.get('id'))
     except:
-        abort(400, "Invalid start and/or end dates.")
+        abort(400, "Invalid request")
+
     sql_string = '''
         SELECT
-            o_custkey
-          , SUM(o_totalprice) AS sum_totalprice
-        FROM snowflake_sample_data.tpch_sf10.orders
-        WHERE o_orderdate >= '{sdt}'
-          AND o_orderdate <= '{edt}'
-        GROUP BY o_custkey
-        ORDER BY sum_totalprice DESC
-        LIMIT 10
+            C_CUSTOMER_SK,
+            C_CUSTOMER_ID,
+            C_CURRENT_CDEMO_SK,
+            C_CURRENT_HDEMO_SK,
+            C_CURRENT_ADDR_SK,
+            C_FIRST_SHIPTO_DATE_SK,
+            C_FIRST_SALES_DATE_SK,
+            C_SALUTATION,
+            C_FIRST_NAME,
+            C_LAST_NAME,
+            C_PREFERRED_CUST_FLAG,
+            C_BIRTH_DAY,
+            C_BIRTH_MONTH,
+            C_BIRTH_YEAR,
+            C_BIRTH_COUNTRY,
+            C_LOGIN,
+            C_EMAIL_ADDRESS,
+            C_LAST_REVIEW_DATE
+        FROM hybrid_db.data.hybrid_customer
+        WHERE C_CUSTOMER_SK in ({cust_id});
     '''
-    sql = sql_string.format(sdt=sdt, edt=edt)
+    sql = sql_string.format(cust_id=cust_id)
     try:
         res = conn.cursor(DictCursor).execute(sql)
         return make_response(jsonify(res.fetchall()))
     except:
-        abort(500, "Error reading from Snowflake. Check the logs for details.")
-
-## Monthly sales for a clerk in a year
-@connector.route('/clerk/<clerkid>/yearly_sales/<year>')
-def clerk_montly_sales(clerkid, year):
-    # Validate arguments
-    try: 
-        year_int = int(year)
-    except:
-        abort(400, "Invalid year.")
-    if not clerkid.isdigit():
-        abort(400, "Clerk ID can only contain numbers.")
-    clerkid_str = f"Clerk#{clerkid}"
-    sql_string = '''
-        SELECT
-            o_clerk
-          ,  Month(o_orderdate) AS month
-          , SUM(o_totalprice) AS sum_totalprice
-        FROM snowflake_sample_data.tpch_sf10.orders
-        WHERE Year(o_orderdate) = {year}
-          AND o_clerk = '{clerkid}'
-        GROUP BY o_clerk, month
-        ORDER BY o_clerk, month
-    '''
-    sql = sql_string.format(year=year_int, clerkid=clerkid_str)
-    try:
-        res = conn.cursor(DictCursor).execute(sql)
-        return make_response(jsonify(res.fetchall()))
-    except:
-        abort(500, "Error reading from Snowflake. Check the logs for details.")
+        abort(500, "Error reading from Snowflake. Check the logs for details, but also here was sql: " + sql)
