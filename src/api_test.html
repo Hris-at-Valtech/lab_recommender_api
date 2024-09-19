@@ -17,7 +17,7 @@
     <hr>    
     <form id="frm2">
         <table style="width:500px; border:1px solid black">
-            <caption>Top 10 Customers</caption>
+            <caption>Get Customer</caption>
             <tr><td style="width:300px">Customer ID</td><td><input type="text" name="custid" size="12" value="1337"></td></tr>
             <tr><td style="width:300px"><input type="button" onclick="getCust()" value="Submit"></td></tr>
         </table>
@@ -35,16 +35,24 @@
 
     <script>
         function getCust() {
-            dm = document.getElementById("frm1").elements;
-            method = dm[0].value
             d = document.getElementById("frm2").elements;
             custid = d[0].value
-            apiurl = "/" + method + "/customer/" + custid
+            apiurl = "/customer/" + custid
             document.getElementById("output").innerHTML = "Getting Data";
+            const startTime = performance.now();
             fetch(apiurl)
                 .then(response => response.json())
-                .then(data => document.getElementById("output").innerHTML = "<pre>" + JSON.stringify(data, null, "  ") + "</pre>")
+                .then(data => {
+                    const endTime = performance.now();
+                    const responseTime = endTime - startTime;
+
+                    document.getElementById("output").innerHTML = `
+                        <pre>${JSON.stringify(data, null, "  ")}</pre>
+                        <p>Response time: ${responseTime.toFixed(2)} ms</p>
+                    `;
+                })
                 .catch(error => document.getElementById("output").innerHTML = "There was an error: " + error)
+            
         }
 
         function clear_results() {

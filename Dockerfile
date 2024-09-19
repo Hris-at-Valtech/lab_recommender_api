@@ -1,6 +1,6 @@
 FROM python:3.8
 
-RUN pip install snowflake-snowpark-python flask cryptography pyjwt
+RUN pip install snowflake-snowpark-python flask flask_caching
 
 COPY ./src /src
 
