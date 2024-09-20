@@ -77,7 +77,7 @@ def get_customer(cust_id):
         res = conn.cursor(DictCursor).execute(sql)
         return make_response(jsonify(res.fetchall()))
     except:
-        abort(500, "Error reading from Snowflake. Check the logs for details, but also here was sql: " + sql)
+        abort(500, "Error reading from Snowflake. Check the QUERY_HISTORY for details.")
 
 @app.route("/")
 def default():
