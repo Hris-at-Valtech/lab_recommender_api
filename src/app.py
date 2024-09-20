@@ -10,11 +10,13 @@ logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 
-app.config['CACHE_TYPE'] = 'SimpleCache'  # Use in-memory cache
+# use in-memory cache, defaulted to 3min
+app.config['CACHE_TYPE'] = 'SimpleCache'
 app.config['CACHE_DEFAULT_TIMEOUT'] = 180
 
 cache = Cache(app)
 
+# connect to Snowflake using internal SPCS token
 def connect() -> snowflake.connector.SnowflakeConnection:
     if os.path.isfile("/snowflake/session/token"):
         creds = {
@@ -43,6 +45,7 @@ def connect() -> snowflake.connector.SnowflakeConnection:
 
 conn = connect()
 
+# endpoint for querying the hybrid table
 @app.route('/customer/<cust_id>')
 @cache.memoize(timeout=180)
 def get_customer(cust_id):
@@ -66,7 +69,7 @@ def get_customer(cust_id):
             C_LOGIN,
             C_EMAIL_ADDRESS,
             C_LAST_REVIEW_DATE
-        FROM hybrid_db.data.hybrid_customer
+        FROM api.data.hybrid_customer
         WHERE C_CUSTOMER_SK in ({cust_id});
     '''
     sql = sql_string.format(cust_id=cust_id)
@@ -80,6 +83,7 @@ def get_customer(cust_id):
 def default():
     return make_response(jsonify(result='Nothing to see here'))
 
+# test HTML page
 @app.route("/test")
 def tester():
     return send_file("api_test.html")

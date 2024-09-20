@@ -1,3 +1,5 @@
+# Note: This has been modified from the original to only return the token, it will not connect to SPCS
+
 from generateJWT import JWTGenerator
 from datetime import timedelta
 import argparse
