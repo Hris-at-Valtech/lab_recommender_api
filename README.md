@@ -12,7 +12,7 @@ It uses a simple Python Flask API service running in Snowflake Container Service
   * USAGE access on a warehouse
 
 ## Running
-The main guide to this code is featured as a Snowflake Quickstart, found here:
+The main guide to this code is featured as a Snowflake Quickstart, found here: https://quickstarts.snowflake.com/guide/snowflake_personalization_api/index.html#0
 
 This QuickStart is best run by forking this repository, and then running in GitHub codespaces.
 
