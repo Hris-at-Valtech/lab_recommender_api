@@ -7,12 +7,10 @@ It uses a simple Python Flask API service running in Snowflake Container Service
 
 ## Requirements:
 * Snowflake account
-* Snowflake user with
-  * SELECT access to the `SNOWFLAKE_SAMPLES.TPCH_SF10.ORDERS` table
-  * USAGE access on a warehouse
+* Github account
 
 ## Running
-The main guide to this code is featured as a Snowflake Quickstart, found here: https://quickstarts.snowflake.com/guide/snowflake_personalization_api/index.html#0
+The main guide to this code is featured as a Snowflake Quickstart, found here: <quickstart_here>
 
 This QuickStart is best run by forking this repository, and then running in GitHub codespaces.
 

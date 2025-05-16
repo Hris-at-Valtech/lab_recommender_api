@@ -38,7 +38,7 @@ def token_exchange(token, role, endpoint, snowflake_account_url, snowflake_accou
   logger.info("oauth url: %s" %url)
   response = requests.post(url, data=data)
   logger.info("response status : %s" % response.status_code)
-  logger.info("snowflake jwt : %s" % response.text)
+  logger.info("\n\nSnowflake JWT : %s" % response.text)
   assert 200 == response.status_code, "unable to get snowflake token"
   return response.text
 

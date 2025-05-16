@@ -54,7 +54,7 @@ def get_customer(cust_id):
             USER_ID,
             RECOMMENDATIONS
         FROM api.data.hybrid_movie_recommendations
-        WHERE C_CUSTOMER_SK in ({cust_id});
+        WHERE USER_ID in ({cust_id});
     '''
     sql = sql_string.format(cust_id=cust_id)
     try:
