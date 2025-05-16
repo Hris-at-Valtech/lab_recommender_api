@@ -51,25 +51,9 @@ conn = connect()
 def get_customer(cust_id):
     sql_string = '''
         SELECT
-            C_CUSTOMER_SK,
-            C_CUSTOMER_ID,
-            C_CURRENT_CDEMO_SK,
-            C_CURRENT_HDEMO_SK,
-            C_CURRENT_ADDR_SK,
-            C_FIRST_SHIPTO_DATE_SK,
-            C_FIRST_SALES_DATE_SK,
-            C_SALUTATION,
-            C_FIRST_NAME,
-            C_LAST_NAME,
-            C_PREFERRED_CUST_FLAG,
-            C_BIRTH_DAY,
-            C_BIRTH_MONTH,
-            C_BIRTH_YEAR,
-            C_BIRTH_COUNTRY,
-            C_LOGIN,
-            C_EMAIL_ADDRESS,
-            C_LAST_REVIEW_DATE
-        FROM api.data.hybrid_customer
+            USER_ID,
+            RECOMMENDATIONS
+        FROM api.data.hybrid_movie_recommendations
         WHERE C_CUSTOMER_SK in ({cust_id});
     '''
     sql = sql_string.format(cust_id=cust_id)
