@@ -10,7 +10,7 @@ It uses a simple Python Flask API service running in Snowflake Container Service
 * Github account
 
 ## Running
-The main guide to this code is featured as a Snowflake Quickstart, found here: <quickstart_here>
+The main guide to this code is featured as a Snowflake Quickstart, found [here](https://quickstarts.snowflake.com/guide/snowflake_recommendation_engine/index.html?index=..%2F..index#0)
 
 This QuickStart is best run by forking this repository, and then running in GitHub codespaces.
 
